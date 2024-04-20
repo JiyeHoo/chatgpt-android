@@ -17,7 +17,7 @@ object HttpUtil {
 
     val history: ArrayList<Message> = arrayListOf()
     val gptRequestJson = hashMapOf(
-        Pair("model", "gpt-3.5-turbo-16k"),
+        Pair("model", "gpt-3.5-turbo"),
         Pair("stream", true),
         Pair("messages", history)
     )
@@ -26,8 +26,13 @@ object HttpUtil {
      * ChatGPT
      */
     fun chat(send: String, callback: CallBack) {
-        val url = "http://proxy.chat.carlife.host/v1/chat/completions"
-        val apiKey = "Bearer ${Config.apiKey}"
+//        val url = "http://proxy.chat.carlife.host/v1/chat/completions"
+        val url = "https://api.chatanywhere.tech/v1/chat/completions"
+        // sk-I7bzfVwr4YF2HKToaDlAZLT1a8nJP4nXywL3lxeblTbr3nO5
+        var apiKey = "Bearer ${Config.apiKey}"
+        if (Config.apiKey == "1") {
+            apiKey = "Bearer sk-I7bzfVwr4YF2HKToaDlAZLT1a8nJP4nXywL3lxeblTbr3nO5"
+        }
         if (!Config.useContext) {
             history.clear()
         }
@@ -39,6 +44,7 @@ object HttpUtil {
         val body = RequestBody.create(MediaType.parse("application/json"), GsonUtils.toJson(gptRequestJson))
         val request: Request = Request.Builder().url(url).method("POST", body)
             .addHeader("Authorization", apiKey)
+            .addHeader("Content-Type", "application/json")
             .build()
         OkHttpUtil.okHttpClient.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {

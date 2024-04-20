@@ -5,29 +5,14 @@
     android:layout_height="match_parent"
     android:background="@color/background">
 
-    <RelativeLayout
+
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/rl_bar"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="?attr/actionBarSize"
+        app:navigationIcon="?attr/homeAsUpIndicator"
+        app:title="设置" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:textColor="@color/color_dashen"
-            android:text="@string/app_name"
-            />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/list_divider_line"
-            android:layout_alignParentBottom="true"
-            />
-
-    </RelativeLayout>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -276,7 +261,7 @@
                 android:textStyle="bold" />
 
             <RelativeLayout
-                android:id="@+id/rl_donate"
+                android:id="@+id/rl_log"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingStart="@dimen/setting_start_padding"
@@ -314,14 +299,14 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="赞助我们"
+                        android:text="导出对话记录"
                         android:textColor="@color/color_333333"
                         android:textSize="@dimen/setting_start_font_size" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="还有机会成为我们的内测用户体验新功能"
+                        android:text="以文件形式查看"
                         android:textColor="@color/color_999999"
                         android:textSize="@dimen/setting_end_font_size" />
 

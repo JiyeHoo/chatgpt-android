@@ -2,6 +2,7 @@ package org.yameida.asrassistant.activity
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -20,6 +21,8 @@ import org.yameida.asrassistant.utils.HttpUtil
 import org.yameida.asrassistant.adapter.MyPagerAdapter
 import org.yameida.asrassistant.config.Config
 import org.yameida.asrassistant.model.ChatMessageBean
+import java.io.File
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -150,6 +153,7 @@ class ChatActivity : FragmentActivity() {
                     HttpUtil.chat(result, object : HttpUtil.CallBack {
                         override fun onCallBack(result: String, isLast: Boolean) {
                             runOnUiThread {
+                                appendToFile( "log.txt", result)
                                 receivedMessage.content = result
                                 if ((scrollState == 0 && index % 3 == 0) || isLast) {
                                     updateData()
@@ -166,6 +170,15 @@ class ChatActivity : FragmentActivity() {
         }
         ll_settings.setOnClickListener {
             startActivity(Intent(this, ConfigActivity::class.java))
+        }
+    }
+
+    fun appendToFile(fileName: String, content: String) {
+        try {
+            val file = File(filesDir, fileName)
+            file.appendText(content)
+        } catch (e: IOException) {
+            e.printStackTrace()
         }
     }
 

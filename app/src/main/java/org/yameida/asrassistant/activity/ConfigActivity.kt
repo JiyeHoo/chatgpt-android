@@ -4,16 +4,23 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
 import android.widget.CompoundButton
+import androidx.core.content.FileProvider
 import androidx.fragment.app.FragmentActivity
 import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.qmuiteam.qmui.widget.dialog.QMUIDialog
-import kotlinx.android.synthetic.main.activity_config.*
+import kotlinx.android.synthetic.main.activity_config.rl_api_key
+import kotlinx.android.synthetic.main.activity_config.rl_assistant_name
+import kotlinx.android.synthetic.main.activity_config.rl_bar
+import kotlinx.android.synthetic.main.activity_config.rl_gpt_model
+import kotlinx.android.synthetic.main.activity_config.rl_log
+import kotlinx.android.synthetic.main.activity_config.rl_share
+import kotlinx.android.synthetic.main.activity_config.sw_use_context
 import org.yameida.asrassistant.R
 import org.yameida.asrassistant.config.Config
-import org.yameida.asrassistant.utils.DonateUtil
 import org.yameida.asrassistant.utils.HttpUtil
 import org.yameida.asrassistant.utils.ShareUtil
+import java.io.File
 
 
 class ConfigActivity : FragmentActivity() {
@@ -28,13 +35,15 @@ class ConfigActivity : FragmentActivity() {
         rl_api_key.setOnClickListener { showCorpIdDialog() }
         rl_assistant_name.setOnClickListener { showRenameDialog() }
         rl_gpt_model.setOnClickListener { showModelDialog() }
-        rl_donate.setOnClickListener { showDonateDialog() }
+        rl_log.setOnClickListener { showLog() }
         rl_share.setOnClickListener { showShareDialog() }
         sw_use_context.isChecked = Config.useContext
         sw_use_context.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
             LogUtils.i("sw_use_context onCheckedChanged: $isChecked")
             Config.useContext = isChecked
         })
+
+        rl_bar.setNavigationOnClickListener { finish() }
     }
 
     private fun showCorpIdDialog() {
@@ -95,15 +104,27 @@ class ConfigActivity : FragmentActivity() {
             .create(R.style.QMUI_Dialog).show()
     }
 
-    private fun showDonateDialog() {
-        DonateUtil.zfbDonate(this)
+//    private fun showDonateDialog() {
+//        DonateUtil.zfbDonate(this)
+//    }
+
+    private fun showLog() {
+        val file = File(filesDir, "log.txt")
+
+        val contentUri = FileProvider.getUriForFile(this, "org.yameida.asrassistant.fileprovider", file)
+
+        val shareIntent = Intent(Intent.ACTION_SEND)
+        shareIntent.setType("text/plain")
+        shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri)
+        startActivity(Intent.createChooser(shareIntent, "Share File"))
+
     }
 
     private fun showShareDialog() {
         startActivity(Intent.createChooser(Intent().apply {
             action = Intent.ACTION_SEND
             type = ShareUtil.TEXT
-            putExtra(Intent.EXTRA_TEXT, "我发现一个非常好用的聊天程序，文档地址: https://github.com/worktool/chatgpt-android")
+            putExtra(Intent.EXTRA_TEXT, "这是子妍的毕设，地址: https://github.com/jiyehoo/chatgpt-android")
         }, "分享"))
     }
 
