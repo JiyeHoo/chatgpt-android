@@ -17,7 +17,7 @@ object HttpUtil {
 
     val history: ArrayList<Message> = arrayListOf()
     val gptRequestJson = hashMapOf(
-        Pair("model", "gpt-3.5-turbo"),
+//        Pair("model", "gpt-3.5-turbo"),
         Pair("stream", true),
         Pair("messages", history)
     )
@@ -27,11 +27,12 @@ object HttpUtil {
      */
     fun chat(send: String, callback: CallBack) {
 //        val url = "http://proxy.chat.carlife.host/v1/chat/completions"
-        val url = "https://api.chatanywhere.tech/v1/chat/completions"
+        val url = "https://api.chatanywhere.cn/v1/chat/completions"
         // sk-I7bzfVwr4YF2HKToaDlAZLT1a8nJP4nXywL3lxeblTbr3nO5
         var apiKey = "Bearer ${Config.apiKey}"
         if (Config.apiKey == "1") {
-            apiKey = "Bearer sk-I7bzfVwr4YF2HKToaDlAZLT1a8nJP4nXywL3lxeblTbr3nO5"
+//            apiKey = "Bearer sk-I7bzfVwr4YF2HKToaDlAZLT1a8nJP4nXywL3lxeblTbr3nO5"
+            apiKey = "Bearer sk-lYPE5ZYSwWxLproWGTRNjdyNvJgiaLi5YPZjJThWbEluXoQq"
         }
         if (!Config.useContext) {
             history.clear()

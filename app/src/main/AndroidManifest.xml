@@ -34,6 +34,9 @@
         android:usesCleartextTraffic="true"
         android:requestLegacyExternalStorage="true">
 
+<!--        <meta-data android:name="TD_APP_ID" android:value="xxxxxx" />-->
+<!--        <meta-data android:name="TD_CHANNEL_ID" android:value="xxx" />-->
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="org.yameida.asrassistant.fileprovider"

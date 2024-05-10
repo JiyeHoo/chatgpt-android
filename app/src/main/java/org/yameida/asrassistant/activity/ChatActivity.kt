@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.app.ActivityCompat
@@ -28,6 +29,7 @@ import java.util.*
 
 
 class ChatActivity : FragmentActivity() {
+    private val TAG = "ChatActivity"
 
     lateinit var asrUtil: AsrUtil
     var lastFragment: MyFragment? = null
@@ -134,6 +136,8 @@ class ChatActivity : FragmentActivity() {
         chat_send.setOnClickListener {
             val result = chat_content.text.toString()
             if (result.isNotBlank()) {
+                Log.d(TAG, "send: $result")
+                appendToFile("log.txt", "me: $result")
                 lastFragment?.mChatAdapter?.apply {
                     val time = sdf.format(Date())
                     if (mData.count { it.type == ChatMessageBean.TYPE_SYSTEM && it.content == time } == 0) {
@@ -153,7 +157,7 @@ class ChatActivity : FragmentActivity() {
                     HttpUtil.chat(result, object : HttpUtil.CallBack {
                         override fun onCallBack(result: String, isLast: Boolean) {
                             runOnUiThread {
-                                appendToFile( "log.txt", result)
+                                appendToFile("log.txt", "Ai: $result")
                                 receivedMessage.content = result
                                 if ((scrollState == 0 && index % 3 == 0) || isLast) {
                                     updateData()
@@ -176,7 +180,7 @@ class ChatActivity : FragmentActivity() {
     fun appendToFile(fileName: String, content: String) {
         try {
             val file = File(filesDir, fileName)
-            file.appendText(content)
+            file.appendText(content + "\n")
         } catch (e: IOException) {
             e.printStackTrace()
         }
