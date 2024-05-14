@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
 import android.widget.CompoundButton
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.FileProvider
 import androidx.fragment.app.FragmentActivity
 import com.blankj.utilcode.util.LogUtils
@@ -34,7 +35,7 @@ class ConfigActivity : FragmentActivity() {
     private fun initView() {
         rl_api_key.setOnClickListener { showCorpIdDialog() }
         rl_assistant_name.setOnClickListener { showRenameDialog() }
-        rl_gpt_model.setOnClickListener { showModelDialog() }
+        rl_gpt_model.setOnClickListener { showModelChooseDialog() }
         rl_log.setOnClickListener { showLog() }
         rl_share.setOnClickListener { showShareDialog() }
         sw_use_context.isChecked = Config.useContext
@@ -126,6 +127,39 @@ class ConfigActivity : FragmentActivity() {
             type = ShareUtil.TEXT
             putExtra(Intent.EXTRA_TEXT, "这是子妍的毕设，地址: https://github.com/jiyehoo/chatgpt-android")
         }, "分享"))
+    }
+
+    private fun showModelChooseDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("选择 GPT 模型")
+        val options = arrayOf("GPT-3.5-Turbo", "GPT-3.5-Turbo-16K", "GPT-4")
+        var checkedItem = when (Config.gptModel) {
+            "GPT-3.5-Turbo" -> 0
+            "GPT-3.5-Turbo-16K" -> 1
+            "GPT-4" -> 2
+            else -> 0 // Default to option 1
+        }
+        builder.setSingleChoiceItems(options, checkedItem) { dialog, which ->
+            checkedItem = which
+        }
+        builder.setPositiveButton("OK") { dialog, which ->
+            // Handle the selected option here
+            when (checkedItem) {
+                0 -> {
+                    Config.gptModel = "GPT-3.5-Turbo".trim()
+                }
+                1 -> {
+                    Config.gptModel = "GPT-3.5-Turbo-16K".trim()
+                }
+                2 -> {
+                    Config.gptModel = "GPT-4".trim()
+                }
+            }
+            HttpUtil.gptRequestJson["model"] = Config.gptModel
+            dialog.dismiss()
+        }
+        val dialog = builder.create()
+        dialog.show()
     }
 
 }
